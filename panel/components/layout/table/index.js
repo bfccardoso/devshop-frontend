@@ -11,7 +11,7 @@ const TableHead = ({children}) => {
   return (<thead><tr>{children}</tr></thead>)
 }
 const TableTh = ({children}) => {
-  return <th className="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase border-b border-gray-200 bg-gray-50">{children}</th>
+  return <th className="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-left text-gray-700 uppercase border-b border-gray-200 bg-blue-100">{children}</th>
 }
 const TableBody = ({children}) => {
   return (<tbody className="bg-white">{children}</tbody>)
