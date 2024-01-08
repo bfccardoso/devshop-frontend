@@ -10,13 +10,13 @@ import Alert from '../../components/alert/index.js'
 
 const DELETE_BRAND = `
 mutation deleteBrand($id: String!){
-  deleteBrand (id: $id)
+  panelDeleteBrand (id: $id)
 }
 `
 
 const REMOVE_BRAND_LOGO = `
 mutation removeBrandLogo($id: String!){
-  removeBrandLogo (id: $id)
+  panelRemoveBrandLogo (id: $id)
 }
 `
 

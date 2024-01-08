@@ -13,7 +13,7 @@ let id = ''
 
 const UPDATE_BRAND = `
   mutation updateBrand($id: String!, $name: String!, $slug: String!){
-    updateBrand (input: {
+    panelUpdateBrand (input: {
       id: $id,
       name: $name,
       slug: $slug
