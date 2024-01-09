@@ -63,6 +63,8 @@ const fetcher = async query => {
     }
   }
 
+  localStorage.removeItem('accessToken')
+  localStorage.removeItem('refreshToken')
   // enviar para login
   window.location = '/'
   return null
@@ -105,6 +107,8 @@ const uploader = async formData => {
     }
   }
 
+  localStorage.removeItem('accessToken')
+  localStorage.removeItem('refreshToken')
   // enviar para login
   window.location = '/'
   return null

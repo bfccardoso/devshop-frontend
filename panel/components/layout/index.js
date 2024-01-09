@@ -1,10 +1,14 @@
-import React, {Children, useState} from 'react'
+import React, { useState } from 'react'
 import Menu from './menu'
-import { MdHome, MdLabel } from "react-icons/md";
+import { MdHome, MdLabel } from 'react-icons/md'
+import { useQuery } from '../../lib/graphql'
 
-const Layout = ({children}) => {
+const GET_ME = 'query {panelGetMe{id, name, email}}'
+
+const Layout = ({ children }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [dropdownOpen, setDropdownOpen] = useState(false)
+  const { data } = useQuery(GET_ME)
   const close = () => {
     setSidebarOpen(false)
   }
@@ -16,52 +20,70 @@ const Layout = ({children}) => {
   }
   return (
     <div>
-        <div className="flex h-screen bg-gray-200">
-            <div 
-              className={
-                "fixed inset-0 z-20 transition-opacity bg-black opacity-50 lg:hidden" +
-                sidebarOpen ? 'block' : 'hidden'}
-                onClick={close}
-            ></div>
-        
-            <div 
-              className={
-                "fixed inset-y-0 left-0 z-30 w-64 overflow-y-auto transition duration-300 transform bg-gray-900 lg:translate-x-0 lg:static lg:inset-0" +
-                (sidebarOpen
-                  ? 'translate-x-0 ease-out'
-                  : '-translate-x-full ease-in')
-              }
-            >
-              <Menu.Brand>DevShop</Menu.Brand>
-              <Menu.Nav>
-                <Menu.NavItem href={'/'} Icon={MdHome}>Home</Menu.NavItem>
-                <Menu.NavItem href={'/categories'} Icon={MdLabel}>Categorias</Menu.NavItem>
-                <Menu.NavItem href={'/products'} Icon={MdLabel}>Produtos</Menu.NavItem>
-                <Menu.NavItem href={'/brands'} Icon={MdLabel}>Marcas</Menu.NavItem>
-                <Menu.NavItem href={'/users'} Icon={MdLabel}>Usuários</Menu.NavItem>
-              </Menu.Nav>
+      <div className='flex h-screen bg-gray-200'>
+        <div
+          className={
+            'fixed inset-0 z-20 transition-opacity bg-black opacity-50 lg:hidden' +
+            sidebarOpen
+              ? 'block'
+              : 'hidden'
+          }
+          onClick={close}
+        ></div>
+
+        <div
+          className={
+            'fixed inset-y-0 left-0 z-30 w-64 overflow-y-auto transition duration-300 transform bg-gray-900 lg:translate-x-0 lg:static lg:inset-0' +
+            (sidebarOpen
+              ? 'translate-x-0 ease-out'
+              : '-translate-x-full ease-in')
+          }
+        >
+          <Menu.Brand>DevShop</Menu.Brand>
+          <Menu.Nav>
+            <Menu.NavItem href={'/'} Icon={MdHome}>
+              Home
+            </Menu.NavItem>
+            <Menu.NavItem href={'/categories'} Icon={MdLabel}>
+              Categorias
+            </Menu.NavItem>
+            <Menu.NavItem href={'/products'} Icon={MdLabel}>
+              Produtos
+            </Menu.NavItem>
+            <Menu.NavItem href={'/brands'} Icon={MdLabel}>
+              Marcas
+            </Menu.NavItem>
+            <Menu.NavItem href={'/users'} Icon={MdLabel}>
+              Usuários
+            </Menu.NavItem>
+          </Menu.Nav>
+        </div>
+        <div className='flex flex-col flex-1 overflow-hidden'>
+          <header className='flex items-center justify-between px-6 py-4 bg-white border-b-4 border-indigo-600'>
+            <div className='flex items-center'>
+              <button
+                onClick={open}
+                className='text-gray-500 focus:outline-none lg:hidden'
+              >
+                <svg
+                  className='w-6 h-6'
+                  viewBox='0 0 24 24'
+                  fill='none'
+                  xmlns='http://www.w3.org/2000/svg'
+                >
+                  <path
+                    d='M4 6H20M4 12H20M4 18H11'
+                    stroke='currentColor'
+                    strokeWidth='2'
+                    strokeLinecap='round'
+                    strokeLinejoin='round'
+                  ></path>
+                </svg>
+              </button>
             </div>
-            <div className="flex flex-col flex-1 overflow-hidden">
-                <header className="flex items-center justify-between px-6 py-4 bg-white border-b-4 border-indigo-600">
-                    <div className="flex items-center">
-                        <button 
-                          onClick={open} 
-                          className="text-gray-500 focus:outline-none lg:hidden"
-                        >
-                        <svg 
-                          className="w-6 h-6" 
-                          viewBox="0 0 24 24" 
-                          fill="none" 
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                            <path d="M4 6H20M4 12H20M4 18H11" stroke="currentColor" strokeWidth="2" strokeLinecap="round"
-                                strokeLinejoin="round"></path>
-                        </svg>
-                        </button>
-                    </div>
-        
-                    <div className="flex items-center">
-                        {/* <div x-data="{ notificationOpen: false }" className="relative">
+
+            <div className='flex items-center'>
+              {/* <div x-data="{ notificationOpen: false }" className="relative">
                             <button onClick={close}
                                 className="flex mx-4 text-gray-600 focus:outline-none">
                                 <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -117,47 +139,62 @@ const Layout = ({children}) => {
                                 </a>
                             </div>
                         </div> */}
-        
-                        <div className='relative'>
-                            <button onClick={() => setDropdownOpen(old => !old)}
-                                className='relative block w-8 h-8 overflow-hidden rounded-full shadow focus:outline-none'>
-                                <img className='object-cover w-full h-full'
-                                    src='https://images.unsplash.com/photo-1528892952291-009c663ce843?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=crop&amp;w=296&amp;q=80'
-                                    alt='Your avatar' />
-                            </button>
-        
-                            <div 
-                              onClick={() => setDropdownOpen(false)}
-                              className={
-                                'fixed inset-0 z-10 w-full h-full' +
-                                dropdownOpen
-                                  ? 'block'
-                                  : ''
-                              }
-                            ></div>
-        
-                            { dropdownOpen && <div
-                                className={
-                                  'absolute right-0 z-10 w-48 mt-2 overflow-hidden bg-white rounded-md shadow-xl'
-                                }
-                            >
-                              <a href="#"
-                                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-600 hover:text-white">Profile</a>
-                              <a href="#"
-                                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-600 hover:text-white">Products</a>
-                              <a href="#"
-                                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-600 hover:text-white">Logout</a>
-                            </div>}
-                        </div>
-                    </div>
-                </header>
-                <main className="flex-1 overflow-x-hidden overflow-y-auto bg-gray-200">
-                    <div className="container px-6 py-8 mx-auto">
-                      {children}
-                    </div>
-                </main>
+
+              <div className='relative'>
+                <button
+                  onClick={() => setDropdownOpen(old => !old)}
+                  className='relative block w-8 h-8 overflow-hidden rounded-full shadow focus:outline-none'
+                >
+                  <img
+                    className='object-cover w-full h-full'
+                    src='https://images.unsplash.com/photo-1528892952291-009c663ce843?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=crop&amp;w=296&amp;q=80'
+                    alt='Your avatar'
+                  />
+                </button>
+
+                <div
+                  onClick={() => setDropdownOpen(false)}
+                  className={
+                    'fixed inset-0 z-10 w-full h-full' + dropdownOpen
+                      ? 'block'
+                      : ''
+                  }
+                ></div>
+
+                {dropdownOpen && (
+                  <div
+                    className={
+                      'absolute right-0 z-10 w-48 mt-2 overflow-hidden bg-white rounded-md shadow-xl'
+                    }
+                  >
+                    <a
+                      href='#'
+                      className='block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-600 hover:text-white'
+                    >
+                      Profile
+                    </a>
+                    <a
+                      href='#'
+                      className='block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-600 hover:text-white'
+                    >
+                      Products
+                    </a>
+                    <a
+                      href='#'
+                      className='block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-600 hover:text-white'
+                    >
+                      Logout
+                    </a>
+                  </div>
+                )}
+              </div>
             </div>
+          </header>
+          <main className='flex-1 overflow-x-hidden overflow-y-auto bg-gray-200'>
+            <div className='container px-6 py-8 mx-auto'>{children}</div>
+          </main>
         </div>
+      </div>
     </div>
   )
 }
