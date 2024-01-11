@@ -71,7 +71,6 @@ const Index = () => {
     },
     validationSchema: UserSchema,
     onSubmit: async values => {
-      console.log(JSON.stringify(values))
       const data = await createUser(values)
       if (data && !data.errors) {
         router.push('/users')

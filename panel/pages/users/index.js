@@ -85,6 +85,13 @@ const Index = () => {
                               |{' '}
                               <Link
                                 className='text-indigo-600 hover:text-indigo-900'
+                                href={`/users/${item.id}/sessions`}
+                              >
+                                Sessões
+                              </Link>{' '}
+                              |{' '}
+                              <Link
+                                className='text-indigo-600 hover:text-indigo-900'
                                 href={`/users/${item.id}/passwd`}
                               >
                                 Alterar senha
