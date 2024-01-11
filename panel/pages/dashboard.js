@@ -3,7 +3,7 @@ import Layout from '../components/layout'
 import Title from '../components/layout/title'
 import Card from '../components/layout/card'
 import { MdHome } from 'react-icons/md'
-import Table from '../components/layout/table'
+import Table from '../components/layout/table/'
 const Dashboard = () => {
   return (
     <Layout>

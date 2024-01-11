@@ -63,6 +63,7 @@ const Index = () => {
                 <Table.Head>
                   <Table.Th>Marcas</Table.Th>
                   <Table.Th></Table.Th>
+                  <Table.Th></Table.Th>
                 </Table.Head>
 
                 <Table.Body>

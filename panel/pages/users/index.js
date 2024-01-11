@@ -20,15 +20,28 @@ const GET_ALL_USERS = `
       name
       email
       role
+      picture
     }
   }
+`
+
+const REMOVE_USER_PICTURE = `
+mutation removeUserPicture($id: String!){
+  panelRemoveUserPicture (id: $id)
+}
 `
 
 const Index = () => {
   const { data, mutate } = useQuery(GET_ALL_USERS)
   const [deleteData, deleteUser] = useMutation(DELETE_USER)
+  const [deleteUserPictureData, deleteUserPicture] =
+    useMutation(REMOVE_USER_PICTURE)
   const remove = id => async () => {
     await deleteUser({ id })
+    mutate()
+  }
+  const removeUserPicture = id => async () => {
+    await deleteUserPicture({ id })
     mutate()
   }
   return (
@@ -55,6 +68,7 @@ const Index = () => {
                   <Table.Head>
                     <Table.Th>Usuários</Table.Th>
                     <Table.Th></Table.Th>
+                    <Table.Th></Table.Th>
                   </Table.Head>
 
                   <Table.Body>
@@ -63,6 +77,15 @@ const Index = () => {
                       data.panelGetAllUsers.map(item => {
                         return (
                           <Table.Tr key={item.id}>
+                            <Table.Td>
+                              {item.picture && (
+                                <img
+                                  src={item.picture}
+                                  alt={item.name}
+                                  className='w-12 h-12 rounded-full'
+                                />
+                              )}
+                            </Table.Td>
                             <Table.Td>
                               <div className='flex items-center'>
                                 <div>
@@ -97,6 +120,25 @@ const Index = () => {
                                 Alterar senha
                               </Link>{' '}
                               |{' '}
+                              <Link
+                                className='text-indigo-600 hover:text-indigo-900'
+                                href={`/users/${item.id}/upload`}
+                              >
+                                Upload foto
+                              </Link>{' '}
+                              |{' '}
+                              {item.picture && (
+                                <>
+                                  <Link
+                                    href='#'
+                                    className='text-indigo-600 hover:text-indigo-900'
+                                    onClick={removeUserPicture(item.id)}
+                                  >
+                                    Remove foto
+                                  </Link>{' '}
+                                  |{' '}
+                                </>
+                              )}
                               <Link
                                 href='#'
                                 className='text-indigo-600 hover:text-indigo-900'
