@@ -2,10 +2,12 @@ import React, { useState } from 'react'
 import Menu from './menu'
 import { MdHome, MdLabel } from 'react-icons/md'
 import { useQuery } from '../../lib/graphql'
+import { useRouter } from 'next/router'
 
-const GET_ME = 'query {panelGetMe{id, name, email}}'
+const GET_ME = 'query {panelGetMe{id, name, email, picture}}'
 
 const Layout = ({ children }) => {
+  const router = useRouter()
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [dropdownOpen, setDropdownOpen] = useState(false)
   const { data } = useQuery(GET_ME)
@@ -17,6 +19,12 @@ const Layout = ({ children }) => {
   }
   const setFalseDropdownOpen = () => {
     setDropdownOpen(false)
+  }
+  const logout = () => {
+    console.log('LOGOUT')
+    localStorage.removeItem('refreshToken')
+    localStorage.removeItem('accessToken')
+    router.push('/')
   }
   return (
     <div>
@@ -41,7 +49,7 @@ const Layout = ({ children }) => {
         >
           <Menu.Brand>DevShop</Menu.Brand>
           <Menu.Nav>
-            <Menu.NavItem href={'/'} Icon={MdHome}>
+            <Menu.NavItem href={'/dashboard'} Icon={MdHome}>
               Home
             </Menu.NavItem>
             <Menu.NavItem href={'/categories'} Icon={MdLabel}>
@@ -147,8 +155,8 @@ const Layout = ({ children }) => {
                 >
                   <img
                     className='object-cover w-full h-full'
-                    src='https://images.unsplash.com/photo-1528892952291-009c663ce843?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=crop&amp;w=296&amp;q=80'
-                    alt='Your avatar'
+                    src={data && data.panelGetMe && data.panelGetMe.picture}
+                    alt=''
                   />
                 </button>
 
@@ -182,6 +190,7 @@ const Layout = ({ children }) => {
                     <a
                       href='#'
                       className='block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-600 hover:text-white'
+                      onClick={() => logout()}
                     >
                       Logout
                     </a>
