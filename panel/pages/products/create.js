@@ -11,7 +11,7 @@ import Select from '../../components/select/index.js'
 import * as Yup from 'yup'
 
 const CREATE_PRODUCTS = `
-  mutation createProduct($name: String!, $slug: String!, $description: String!, $category: String!, $sku: String, $price: Float, $weight: Float, $optionNames: [String!], $variations: [VariationInput!]){
+  mutation createProduct($name: String!, $slug: String!, $description: String!, $category: String!, $sku: String, $price: Float, $weight: Float, $optionNames: [String!], $stock: Int!, $variations: [VariationInput!]){
     panelCreateProduct (input: {
       name: $name,
       slug: $slug,
@@ -21,6 +21,7 @@ const CREATE_PRODUCTS = `
       price: $price,
       weight: $weight,
       optionNames: $optionNames,
+      stock: $stock,
       variations: $variations
     }) {
       id
@@ -79,9 +80,6 @@ const ProductSchema = Yup.object().shape({
 
 const Index = () => {
   const router = useRouter()
-  const [variations, setVariations] = useState([
-    { variation1: '', variation2: '' }
-  ])
   const [data, createProduct] = useMutation(CREATE_PRODUCTS)
   const { data: categories, mutate } = useQuery(GET_ALL_CATEGORIES)
   const form = useFormik({
@@ -93,6 +91,7 @@ const Index = () => {
       sku: '',
       price: 0,
       weight: 0,
+      stock: 0,
       optionName1: '',
       optionName2: '',
       variations: []
@@ -103,12 +102,14 @@ const Index = () => {
         ...values,
         price: Number(values.price),
         weight: Number(values.weight),
+        stock: Number(values.stock),
         optionNames: [values.optionName1, values.optionName2],
         variations: values.variations.map(variation => {
           return {
             ...variation,
             price: Number(variation.price),
-            weight: Number(variation.weight)
+            weight: Number(variation.weight),
+            stock: Number(variation.stock)
           }
         })
       }
@@ -127,22 +128,6 @@ const Index = () => {
         id: item.id,
         label: item.name
       }
-    })
-  }
-  const addVariation = () => {
-    setVariations(old => {
-      return [
-        {
-          ...old,
-          ...{
-            optionName1: '',
-            optionName2: '',
-            sku: '',
-            price: 0,
-            weight: 0
-          }
-        }
-      ]
     })
   }
 
@@ -221,6 +206,14 @@ const Index = () => {
                   name='weight'
                   errorMessage={form.errors.weight}
                 ></Input>
+                <Input
+                  label='Estoque do produto'
+                  placeholder='Preencha com o estoque do produto'
+                  value={form.values.stock}
+                  onChange={form.handleChange}
+                  name='stock'
+                  errorMessage={form.errors.stock}
+                ></Input>
                 <h3>Variações / grade de produtos</h3>
                 <Input
                   label='Opção de variação 1'
@@ -255,7 +248,8 @@ const Index = () => {
                                   optionName2: '',
                                   sku: '',
                                   price: 0,
-                                  weight: 0
+                                  weight: 0,
+                                  stock: 0
                                 })
                               }
                             >
@@ -270,6 +264,7 @@ const Index = () => {
                                 <Table.Th>SKU</Table.Th>
                                 <Table.Th>Preço</Table.Th>
                                 <Table.Th>Peso</Table.Th>
+                                <Table.Th>Estoque</Table.Th>
                                 <Table.Th></Table.Th>
                               </Table.Head>
 
@@ -339,6 +334,18 @@ const Index = () => {
                                               }
                                               onChange={form.handleChange}
                                               name={`variations.${index}.weight`}
+                                            />
+                                          </Table.Td>
+                                          <Table.Td>
+                                            <Input
+                                              label='Estoque'
+                                              placeholder='Preencha com o estoque da variação'
+                                              value={
+                                                form.values.variations[index]
+                                                  .stock
+                                              }
+                                              onChange={form.handleChange}
+                                              name={`variations.${index}.stock`}
                                             />
                                           </Table.Td>
                                           <Table.Td>
