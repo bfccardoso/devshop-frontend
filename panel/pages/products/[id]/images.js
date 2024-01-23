@@ -75,7 +75,7 @@ const Upload = () => {
       </div>
       {data &&
         data?.getProductById &&
-        data?.getProductById?.images !== null && (
+        data?.getProductById?.images === null && (
           <Alert>Nenhuma imagem enviada até o momento</Alert>
         )}
       {data &&
