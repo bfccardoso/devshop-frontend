@@ -58,8 +58,8 @@ const Upload = () => {
     }
   })
 
-  const delImage = async(url) => {
-    await deleteImage({id: router.query.id, url})
+  const delImage = async url => {
+    await deleteImage({ id: router.query.id, url })
     mutate()
   }
 
@@ -73,9 +73,11 @@ const Upload = () => {
       <div className='p-1 py-5'>
         <Button.LinkOutline href={'/products'}>Voltar</Button.LinkOutline>
       </div>
-      {data?.getProductById?.images.length === 0 && (
-        <Alert>Nenhuma imagem enviada até o momento</Alert>
-      )}
+      {data &&
+        data?.getProductById &&
+        data?.getProductById?.images !== null && (
+          <Alert>Nenhuma imagem enviada até o momento</Alert>
+        )}
       {data &&
         data?.getProductById &&
         data?.getProductById?.images !== null &&
@@ -86,7 +88,10 @@ const Upload = () => {
               className='p-2 m-1 border border-gray-500 rounded hover:bg-gray-300'
             >
               <img src={img} className='rounded' />
-              <button className='bg-red-400 text-white font-bold p-2 rounded mt-1' onClick={() => delImage(img)}>
+              <button
+                className='bg-red-400 text-white font-bold p-2 rounded mt-1'
+                onClick={() => delImage(img)}
+              >
                 Remover
               </button>
             </div>
