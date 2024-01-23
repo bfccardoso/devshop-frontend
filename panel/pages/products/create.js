@@ -11,12 +11,13 @@ import Select from '../../components/select/index.js'
 import * as Yup from 'yup'
 
 const CREATE_PRODUCTS = `
-  mutation createProduct($name: String!, $slug: String!, $description: String!, $category: String!, $sku: String, $price: Float, $weight: Float, $optionNames: [String!], $stock: Int!, $variations: [VariationInput!]){
+  mutation createProduct($name: String!, $slug: String!, $description: String!, $category: String!, $brand: String!, $sku: String, $price: Float, $weight: Float, $optionNames: [String!], $stock: Int!, $variations: [VariationInput!]){
     panelCreateProduct (input: {
       name: $name,
       slug: $slug,
       description: $description,
       category: $category,
+      brand: $brand,
       sku: $sku,
       price: $price,
       weight: $weight,
@@ -42,6 +43,16 @@ const GET_ALL_CATEGORIES = `
   }
 `
 
+const GET_ALL_BRANDS = `
+  query{
+    getAllBrands{
+      id
+      name
+      slug
+    }
+  }
+`
+
 const ProductSchema = Yup.object().shape({
   name: Yup.string()
     .min(3, 'Por favor, informe pelo menos um nome com 3 caracteres.')
@@ -52,6 +63,9 @@ const ProductSchema = Yup.object().shape({
   category: Yup.string()
     .min(1, 'Por favor, selecione uma categoria.')
     .required('Por favor, selecione uma categoria.'),
+  brand: Yup.string()
+    .min(1, 'Por favor, selecione uma marca.')
+    .required('Por favor, selecione uma marca.'),
   slug: Yup.string()
     .min(3, 'Por favor, informe pelo menos um slug com 3 caracteres.')
     .required('Por favor, informe um slug para o produto.')
@@ -81,13 +95,15 @@ const ProductSchema = Yup.object().shape({
 const Index = () => {
   const router = useRouter()
   const [data, createProduct] = useMutation(CREATE_PRODUCTS)
-  const { data: categories, mutate } = useQuery(GET_ALL_CATEGORIES)
-  const form = useFormik({
+  const { data: categories, mutate: mutateCategories } = useQuery(GET_ALL_CATEGORIES)
+  const { data: brands, mutate: mutateBrands } = useQuery(GET_ALL_BRANDS)
+    const form = useFormik({
     initialValues: {
       name: '',
       slug: '',
       description: '',
       category: '',
+      brand: '',
       sku: '',
       price: 0,
       weight: 0,
@@ -121,9 +137,18 @@ const Index = () => {
   })
 
   // tratar os options
-  let options = []
+  let optionsCategories = []
   if (categories && categories.getAllCategories) {
-    options = categories.getAllCategories.map(item => {
+    optionsCategories = categories.getAllCategories.map(item => {
+      return {
+        id: item.id,
+        label: item.name
+      }
+    })
+  }
+  let optionsBrands = []
+  if (brands && brands.getAllBrands) {
+    optionsBrands = brands.getAllBrands.map(item => {
       return {
         id: item.id,
         label: item.name
@@ -178,8 +203,17 @@ const Index = () => {
                   name='category'
                   onChange={form.handleChange}
                   value={form.values.category}
-                  options={options}
+                  options={optionsCategories}
                   errorMessage={form.errors.category}
+                  initial={{ id: '', label: 'Selecione...' }}
+                />
+                <Select
+                  label='Selecione a marca'
+                  name='brand'
+                  onChange={form.handleChange}
+                  value={form.values.brand}
+                  options={optionsBrands}
+                  errorMessage={form.errors.brand}
                   initial={{ id: '', label: 'Selecione...' }}
                 />
                 <Input
@@ -349,7 +383,14 @@ const Index = () => {
                                             />
                                           </Table.Td>
                                           <Table.Td>
-                                            <Button type='button' onClick={() => arrayHelpers.remove(index)}>Excluir</Button>
+                                            <Button
+                                              type='button'
+                                              onClick={() =>
+                                                arrayHelpers.remove(index)
+                                              }
+                                            >
+                                              Excluir
+                                            </Button>
                                           </Table.Td>
                                         </Table.Tr>
                                       )
