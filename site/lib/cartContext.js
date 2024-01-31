@@ -10,8 +10,11 @@ export const CartProvider = ({ children }) => {
     setItems(JSON.parse(loadedCart))
   }, [])
   const addToCart = (product, selectedVariation) => {
-    const variation = selectedVariation[0]
-    const variationId = variation.optionName1 + variation.optionName2
+    const variation = selectedVariation.length > 0 ? selectedVariation[0] : []
+    const variationId =
+      selectedVariation.length > 0
+        ? variation.optionName1 + variation.optionName2
+        : ''
 
     setItems(current => {
       const newCart = { ...current }

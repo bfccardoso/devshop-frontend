@@ -33,7 +33,7 @@ const Cart = ({ brands, categories }) => {
     <>
       <Layout categories={categories}>
         <Seo />
-        <div className='h-screen bg-gray-100 pt-20'>
+        <div className='h-screen bg-gray-100 pt-20 overflow-y-auto'>
           <h1 className='mb-10 text-center text-2xl font-bold'>
             Itens do carrinho
           </h1>
@@ -61,14 +61,16 @@ const Cart = ({ brands, categories }) => {
                             </span>
                             <br />
                             {product.optionNames[0]}
-                            {': '}
+                            {product.optionNames[0].length > 0 ? ': ' : ''}
                             {qtd[key].variation.optionName1}
-                            {' / '}
+                            {product.optionNames[1].length > 0 ? ' / ' : ''}
                             {product.optionNames[1]}
-                            {': '}
+                            {product.optionNames[1].length > 0 ? ': ' : ''}
                             {qtd[key].variation.optionName2}
                             <p className='mt-1 text-xs text-gray-700'>
-                              {priceFormat(qtd[key].variation.price)}
+                              {Object.keys(qtd[key].variation).length > 0
+                                ? priceFormat(qtd[key].variation.price)
+                                : priceFormat(product.price)}
                             </p>
                           </div>
                           <div className='mt-4 flex justify-between sm:mt-0 sm:block'>
@@ -94,7 +96,11 @@ const Cart = ({ brands, categories }) => {
                             </div>
                             <div className='items-center mt-1 md:ml-1.5'>
                               <p className='text-sm md:ml-3.5'>
-                                  {priceFormat(qtd[key].variation.price * qtd[key].qtd)}
+                                {Object.keys(qtd[key].variation).length > 0
+                                  ? priceFormat(
+                                      qtd[key].variation.price * qtd[key].qtd
+                                    )
+                                  : priceFormat(product.price * qtd[key].qtd)}
                               </p>
                               <button
                                 onClick={() => {
@@ -118,9 +124,7 @@ const Cart = ({ brands, categories }) => {
               <div className='mt-6 h-full rounded-lg border bg-white p-6 shadow-md md:mt-0 md:w-1/3'>
                 <div className='mb-2 flex justify-between'>
                   <p className='text-gray-700'>Subtotal</p>
-                  <p className='text-gray-700'>
-                    {priceFormat(cart.cartTotal)}
-                  </p>
+                  <p className='text-gray-700'>{priceFormat(cart.cartTotal)}</p>
                 </div>
                 <div className='flex justify-between'>
                   <p className='text-gray-700'>Frete</p>

@@ -3,6 +3,7 @@ import { fetcher } from '../../lib/graphql'
 import Layout from '../../components/Layout'
 import { useState } from 'react'
 import { useCart } from '../../lib/cartContext'
+import priceFormat from '../../lib/priceUtils'
 
 const GET_PRODUCT_BY_SLUG = gql`
   query getProductBySlug($slug: String!) {
@@ -284,7 +285,7 @@ const Product = ({ product, categories }) => {
               </div>
               <div className='flex'>
                 <span className='title-font font-medium text-2xl text-gray-900'>
-                  R$ {Number(selectedPrice).toFixed(2).replace('.', ',')}
+                  {priceFormat(selectedPrice)}
                 </span>
                 <button onClick={() => cart.addToCart(product, selectedVariation)} className='flex ml-auto text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded'>
                   Adicionar no carrinho

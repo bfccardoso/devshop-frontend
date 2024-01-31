@@ -65,6 +65,7 @@ const Index = () => {
 
             <Input
               label='Senha'
+              type='password'
               placeholder='Sua senha'
               value={form.values.passwd}
               onChange={form.handleChange}

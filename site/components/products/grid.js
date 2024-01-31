@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import priceFormat from '../../lib/priceUtils'
 
 const Grid = ({product: product}) => {
   return (
@@ -22,7 +23,7 @@ const Grid = ({product: product}) => {
           <Link href={`/produto/${product.slug}`}>{product.name}</Link>
         </h2>
         <p className='mt-1'>
-          R$ {Number(product.price).toFixed(2).replace('.', ',')}
+          {priceFormat(product.price)}
         </p>
       </div>
     </div>
