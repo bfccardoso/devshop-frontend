@@ -27,12 +27,11 @@ mutation deleteProductImage($id: String!, $url: String!){
 }
 `
 
-const Upload = () => {
-  const router = useRouter()
+const Upload = ({id}) => {
   const [deleteData, deleteImage] = useMutation(DELETE_IMAGE)
   const { data, mutate } = useQuery(`
     query{
-    getProductById(id: "${router.query.id}"){
+    getProductById(id: "${id}"){
       name,
       slug,
       images
@@ -41,13 +40,13 @@ const Upload = () => {
   const [updatedData, uploadProductImage] = useUpload(UPLOAD_PRODUCT_IMAGE)
   const form = useFormik({
     initialValues: {
-      id: router.query.id,
+      id: id,
       file: ''
     },
     onSubmit: async values => {
       const product = {
         ...values,
-        id: router.query.id
+        id: id
       }
 
       const data = await uploadProductImage(product)
@@ -59,7 +58,7 @@ const Upload = () => {
   })
 
   const delImage = async url => {
-    await deleteImage({ id: router.query.id, url })
+    await deleteImage({ id: id, url })
     mutate()
   }
 
@@ -123,4 +122,13 @@ const Upload = () => {
     </Layout>
   )
 }
-export default Upload
+
+const UploadWrapper = () => {
+  const router = useRouter()
+  if(router.query.id){
+    return <Upload id={router.query.id} />
+  }
+  return( <p>Loading...</p>)
+}
+
+export default UploadWrapper

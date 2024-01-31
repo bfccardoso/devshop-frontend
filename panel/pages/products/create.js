@@ -89,15 +89,24 @@ const ProductSchema = Yup.object().shape({
         }
         return false
       }
-    )
+    ),
+  price: Yup.number()
+    .positive('Deve ser um valor positivo')
+    //.test('is-decimal', value => (value + '').match(/^\d+(\.\d{0,2})?$/))
+    .notRequired(),
+  weight: Yup.number()
+    .positive('Deve ser um valor positivo')
+    .test('is-decimal', value => (value + '').match(/^\d+(\.\d{0,2})?$/))
+    .notRequired()
 })
 
 const Index = () => {
   const router = useRouter()
   const [data, createProduct] = useMutation(CREATE_PRODUCTS)
-  const { data: categories, mutate: mutateCategories } = useQuery(GET_ALL_CATEGORIES)
+  const { data: categories, mutate: mutateCategories } =
+    useQuery(GET_ALL_CATEGORIES)
   const { data: brands, mutate: mutateBrands } = useQuery(GET_ALL_BRANDS)
-    const form = useFormik({
+  const form = useFormik({
     initialValues: {
       name: '',
       slug: '',
@@ -105,7 +114,7 @@ const Index = () => {
       category: '',
       brand: '',
       sku: '',
-      price: 0,
+      price: 0.0,
       weight: 0,
       stock: 0,
       optionName1: '',
@@ -233,7 +242,7 @@ const Index = () => {
                   errorMessage={form.errors.price}
                 ></Input>
                 <Input
-                  label='Peso do produto'
+                  label='Peso do produto (em gramas)'
                   placeholder='Preencha com o peso do produto'
                   value={form.values.weight}
                   onChange={form.handleChange}
