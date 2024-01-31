@@ -2,6 +2,7 @@ import { gql } from 'graphql-request'
 import { fetcher } from '../../lib/graphql'
 import Layout from '../../components/Layout'
 import { useState } from 'react'
+import { useCart } from '../../lib/cartContext'
 
 const GET_PRODUCT_BY_SLUG = gql`
   query getProductBySlug($slug: String!) {
@@ -36,6 +37,7 @@ const GET_ALL_CATEGORIES = gql`
 `
 
 const Product = ({ product, categories }) => {
+  const cart = useCart()
   const [currentImage, setCurrentImage] = useState(0)
   const [variation1, setVariation1] = useState('')
   const [variation2, setVariation2] = useState('')
@@ -126,9 +128,9 @@ const Product = ({ product, categories }) => {
                   <svg
                     fill='currentColor'
                     stroke='currentColor'
-                    stroke-linecap='round'
-                    stroke-linejoin='round'
-                    stroke-width='2'
+                    strokeLinecap='round'
+                    strokeLinejoin='round'
+                    strokeWidth='2'
                     className='w-4 h-4 text-indigo-500'
                     viewBox='0 0 24 24'
                   >
@@ -137,9 +139,9 @@ const Product = ({ product, categories }) => {
                   <svg
                     fill='currentColor'
                     stroke='currentColor'
-                    stroke-linecap='round'
-                    stroke-linejoin='round'
-                    stroke-width='2'
+                    strokeLinecap='round'
+                    strokeLinejoin='round'
+                    strokeWidth='2'
                     className='w-4 h-4 text-indigo-500'
                     viewBox='0 0 24 24'
                   >
@@ -148,9 +150,9 @@ const Product = ({ product, categories }) => {
                   <svg
                     fill='currentColor'
                     stroke='currentColor'
-                    stroke-linecap='round'
-                    stroke-linejoin='round'
-                    stroke-width='2'
+                    strokeLinecap='round'
+                    strokeLinejoin='round'
+                    strokeWidth='2'
                     className='w-4 h-4 text-indigo-500'
                     viewBox='0 0 24 24'
                   >
@@ -159,9 +161,9 @@ const Product = ({ product, categories }) => {
                   <svg
                     fill='currentColor'
                     stroke='currentColor'
-                    stroke-linecap='round'
-                    stroke-linejoin='round'
-                    stroke-width='2'
+                    strokeLinecap='round'
+                    strokeLinejoin='round'
+                    strokeWidth='2'
                     className='w-4 h-4 text-indigo-500'
                     viewBox='0 0 24 24'
                   >
@@ -170,9 +172,9 @@ const Product = ({ product, categories }) => {
                   <svg
                     fill='none'
                     stroke='currentColor'
-                    stroke-linecap='round'
-                    stroke-linejoin='round'
-                    stroke-width='2'
+                    strokeLinecap='round'
+                    strokeLinejoin='round'
+                    strokeWidth='2'
                     className='w-4 h-4 text-indigo-500'
                     viewBox='0 0 24 24'
                   >
@@ -184,9 +186,9 @@ const Product = ({ product, categories }) => {
                   <a className='text-gray-500'>
                     <svg
                       fill='currentColor'
-                      stroke-linecap='round'
-                      stroke-linejoin='round'
-                      stroke-width='2'
+                      strokeLinecap='round'
+                      strokeLinejoin='round'
+                      strokeWidth='2'
                       className='w-5 h-5'
                       viewBox='0 0 24 24'
                     >
@@ -196,9 +198,9 @@ const Product = ({ product, categories }) => {
                   <a className='text-gray-500'>
                     <svg
                       fill='currentColor'
-                      stroke-linecap='round'
-                      stroke-linejoin='round'
-                      stroke-width='2'
+                      strokeLinecap='round'
+                      strokeLinejoin='round'
+                      strokeWidth='2'
                       className='w-5 h-5'
                       viewBox='0 0 24 24'
                     >
@@ -208,9 +210,9 @@ const Product = ({ product, categories }) => {
                   <a className='text-gray-500'>
                     <svg
                       fill='currentColor'
-                      stroke-linecap='round'
-                      stroke-linejoin='round'
-                      stroke-width='2'
+                      strokeLinecap='round'
+                      strokeLinejoin='round'
+                      strokeWidth='2'
                       className='w-5 h-5'
                       viewBox='0 0 24 24'
                     >
@@ -239,9 +241,9 @@ const Product = ({ product, categories }) => {
                       <svg
                         fill='none'
                         stroke='currentColor'
-                        stroke-linecap='round'
-                        stroke-linejoin='round'
-                        stroke-width='2'
+                        strokeLinecap='round'
+                        strokeLinejoin='round'
+                        strokeWidth='2'
                         className='w-4 h-4'
                         viewBox='0 0 24 24'
                       >
@@ -268,9 +270,9 @@ const Product = ({ product, categories }) => {
                       <svg
                         fill='none'
                         stroke='currentColor'
-                        stroke-linecap='round'
-                        stroke-linejoin='round'
-                        stroke-width='2'
+                        strokeLinecap='round'
+                        strokeLinejoin='round'
+                        strokeWidth='2'
                         className='w-4 h-4'
                         viewBox='0 0 24 24'
                       >
@@ -284,15 +286,15 @@ const Product = ({ product, categories }) => {
                 <span className='title-font font-medium text-2xl text-gray-900'>
                   R$ {Number(selectedPrice).toFixed(2).replace('.', ',')}
                 </span>
-                <button className='flex ml-auto text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded'>
+                <button onClick={() => cart.addToCart(product, selectedVariation)} className='flex ml-auto text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded'>
                   Adicionar no carrinho
                 </button>
                 <button className='rounded-full w-10 h-10 bg-gray-200 p-0 border-0 inline-flex items-center justify-center text-gray-500 ml-4'>
                   <svg
                     fill='currentColor'
-                    stroke-linecap='round'
-                    stroke-linejoin='round'
-                    stroke-width='2'
+                    strokeLinecap='round'
+                    strokeLinejoin='round'
+                    strokeWidth='2'
                     className='w-5 h-5'
                     viewBox='0 0 24 24'
                   >

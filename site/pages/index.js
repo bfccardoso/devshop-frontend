@@ -3,6 +3,7 @@ import Layout from '../components/Layout'
 import { fetcher, useQuery } from '../lib/graphql'
 import { gql } from 'graphql-request'
 import Brands from '../components/Home/Brands'
+import { useCart } from '../lib/cartContext'
 
 const GET_ALL_BRANDS = gql`
   query {
@@ -26,6 +27,7 @@ const GET_ALL_CATEGORIES = gql`
 `
 
 const Index = ({ brands, categories }) => {
+  const cart = useCart()
   return (
     <>
       <Layout categories={categories}>
